@@ -4,8 +4,8 @@ ENV FPM_USER  "nginx"
 ENV GIT_NAME  "alpine"
 ENV GIT_EMAIL "alpine@docker.invalid"
 
-RUN echo "UTC" > /etc/timezone
-RUN apk add --no-cache \
+RUN echo "UTC" > /etc/timezone \
+  && apk add --no-cache \
   bash \
   ca-certificates \
   curl \
@@ -28,21 +28,14 @@ RUN apk add --no-cache \
   php81-simplexml \
   php81-xml
 
-RUN curl -sS https://get.symfony.com/cli/installer \
+RUN curl -sS https://getcomposer.org/installer \
+  | php -- --install-dir /usr/local/bin \
+  && curl -sS https://get.symfony.com/cli/installer \
   | bash -s -- --install-dir /usr/local/bin
 
-RUN curl -sS https://getcomposer.org/installer \
-  | php -- --install-dir /usr/local/bin
-
-RUN git config --global user.name  "$GIT_NAME"
-RUN git config --global user.email "$GIT_EMAIL"
-
 COPY ./nginx/default.conf /etc/nginx/http.d/default.conf
-RUN mkdir -p /run/nginx/
 
 WORKDIR /srv
-
-RUN mkdir -p /srv/symfony
 
 EXPOSE 80
 
