@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.18
 
 ENV FPM_USER  "nginx"
 ENV GIT_NAME  "alpine"
